@@ -1,0 +1,48 @@
+<body>
+    <script src="https://unpkg.com/mithril/mithril.js"></script>
+    
+    <script>
+	    var root = document.body;
+	    var counter = 0;
+
+	    // Welcome component to welcome the user
+	    var Welcome = {
+	    	view : function() {
+	    		return m('div', 
+	    				[
+		    				m('h1', 'Welcome to my application'),
+		    				m('button', {onclick: saveCounter}, 
+		    				  'Clicked ' + counter + ' time(s)!')
+		    			]
+	    		);
+	    	}
+	    };
+
+
+	    // First component displayed to the user
+	    var Home = {
+	    	view : function(){
+	    		return m('a', {href : '#!/welcome'}, 
+	    				 'Enter the Mithril Application!');
+	    	}
+	    }
+
+	    var saveCounter = function() {
+	    	m.request({
+	    		method: 'PUT',
+	    		url: 'https://rem-rest-api.herokuapp.com/api/tutorial/1',
+	    		data: {counter: counter + 1},
+	    		withCredentials: true
+	    	}).then(function(responseData){
+	    		counter = parseInt(responseData.counter);
+	    	});
+	    };
+
+	    // Provide routing details.
+	    m.route(root, '/home', {
+							    	'/home': Home,
+							    	'/welcome': Welcome
+			    				}
+		);
+    </script>
+</body>
